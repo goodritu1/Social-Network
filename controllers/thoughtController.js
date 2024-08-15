@@ -1,6 +1,7 @@
 const {OjectId} = require ('mongoose').Types;
 
 const {Thought, User} = require ('../models');
+const { updateMany } = require('../models/User');
 // api/thoughts
 const thoughtsController = {
 
@@ -18,7 +19,22 @@ const thoughtsController = {
         : res.json(thought)
         )
         .catch((err) => res.status(500).json(err));
+    },
+    addReaction(req, res){
+        Thought.findOneAndUpdate({_id: req.params.thoughtId},
+            {$addToSet: {reactions: req.body}},
+            {new: true, runValidators: true}
+            )
+            .then((thought) => 
+            !thought
+            ? res.status(404).json({ message: 'No thought with that ID'})
+            : res.json(thought)
+            )
+            .catch((err) => res.status(500).json(err));
+
+    },
+
     }
-}
+
 
 module.exports = thoughtsController

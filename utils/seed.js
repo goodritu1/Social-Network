@@ -12,19 +12,22 @@ db.once("open", async () => {
     await Thought.deleteMany({});
 
     await User.insertMany(userData);
-    const newThoughts = await Thought.insertMany(thoughtData);
+    
 
-    // seed reactions inside of each thought
-    // newThoughts.forEach(function(newThought, i) {
-    //     newThought.reactions.push(reactionData[i]);
-    //     console.log(newThought);
+    //seed reactions inside of each thought
+    thoughtData.forEach( async function(newThought, i) {
+
+        newThought.reactions = [];
+        newThought.reactions.push(reactionData[i]);
+        console.log(newThought);
   
-    //     newThought.save();
-    // })
+        // await newThought.save();
 
-    // for (var i = 0; i < newThoughts.length; i++) {
-      
-    // }
+    })
+   
+    
+    const newThoughts = await Thought.insertMany(thoughtData);
+    console.log('here are the thoughts', newThoughts);
 
     console.log("Seeding complete!");
 
